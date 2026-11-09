@@ -46,6 +46,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
   const [customerNotes, setCustomerNotes] = useState<string>('');
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
 
+  const allImages = product.images && product.images.length > 0 ? product.images : [product.image];
+  const [activeImage, setActiveImage] = useState<string>(product.image);
+
   // Price calculations
   const basePrice = product.promotionalPrice || product.basePrice;
   const toppingsPrice = selectedToppings.reduce((acc, t) => acc + t.price, 0);
@@ -114,9 +117,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
           <div className="relative flex items-center justify-center pt-1">
             <div className="w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
               <img
-                src={product.image}
+                src={activeImage}
                 alt={product.name}
-                className="w-full h-full object-contain drop-shadow-lg"
+                className="w-full h-full object-contain drop-shadow-lg transition-all duration-300"
               />
             </div>
 
@@ -150,6 +153,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
               })}
             </div>
           </div>
+
+          {/* Multiple Photos Thumbnails Selector */}
+          {allImages.length > 1 && (
+            <div className="flex items-center justify-center gap-2 overflow-x-auto py-1 scrollbar-none">
+              {allImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveImage(img)}
+                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                    activeImage === img
+                      ? 'border-[#FF7243] scale-105 shadow-md shadow-[#FF7243]/20 ring-2 ring-[#FF7243]/30'
+                      : 'border-[#E4E4E7] opacity-60 hover:opacity-100'
+                  }`}
+                  aria-label={`Ver foto ${idx + 1}`}
+                >
+                  <img src={img} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Stepper Underneath Photo (Orange pill stepper with white - 1 + in reference) */}
           <div className="flex justify-center -mt-2">

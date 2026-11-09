@@ -15,6 +15,7 @@ export type Product = {
   basePrice: number;
   promotionalPrice?: number;
   image: string;
+  images?: string[];
   badge?: 'mais_vendido' | 'novidade' | 'destaque' | 'artesanal';
   rating: number;
   reviewsCount: number;

@@ -43,7 +43,9 @@ import {
   Save,
   RotateCcw,
   MessageCircle,
-  ChevronRight
+  ChevronRight,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 
 type AdminTab =
@@ -98,6 +100,34 @@ export const AdminDashboard: React.FC = () => {
   const [productCatFilter, setProductCatFilter] = useState<string>('todos');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
+  const [productPhotos, setProductPhotos] = useState<string[]>([]);
+
+  const handleProductPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setProductPhotos(prev => [...prev, reader.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemovePhoto = (indexToRemove: number) => {
+    setProductPhotos(prev => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleSetPrimaryPhoto = (indexToPrimary: number) => {
+    setProductPhotos(prev => {
+      const target = prev[indexToPrimary];
+      const others = prev.filter((_, idx) => idx !== indexToPrimary);
+      return [target, ...others];
+    });
+  };
 
   // Category Modal
   const [newCatName, setNewCatName] = useState('');
@@ -779,7 +809,10 @@ export const AdminDashboard: React.FC = () => {
                 </select>
 
                 <button
-                  onClick={() => setIsNewProductModalOpen(true)}
+                  onClick={() => {
+                    setProductPhotos([]);
+                    setIsNewProductModalOpen(true);
+                  }}
                   className="py-1.5 px-3.5 rounded-xl bg-[#FF7243] hover:bg-[#E85D30] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -836,7 +869,10 @@ export const AdminDashboard: React.FC = () => {
 
                       <div className="pt-1.5 flex items-center gap-2">
                         <button
-                          onClick={() => setEditingProduct(prod)}
+                          onClick={() => {
+                            setEditingProduct(prod);
+                            setProductPhotos(prod.images && prod.images.length > 0 ? prod.images : [prod.image]);
+                          }}
                           className="py-1 px-2.5 rounded-lg bg-[#FAF7F2] hover:bg-[#EDE2D6] text-[11px] font-bold text-[#5D473A] flex items-center gap-1"
                         >
                           <Edit2 className="w-3 h-3" />
@@ -1700,6 +1736,9 @@ export const AdminDashboard: React.FC = () => {
                 const promo = formData.get('promotionalPrice') ? parseFloat(formData.get('promotionalPrice') as string) : undefined;
                 const description = formData.get('description') as string;
 
+                const mainPhoto = productPhotos[0] || editingProduct?.image || '/src/assets/images/product_bolo_morango_1794237512290.jpg';
+                const allPhotos = productPhotos.length > 0 ? productPhotos : (editingProduct?.images || [mainPhoto]);
+
                 if (editingProduct) {
                   updateProduct({
                     ...editingProduct,
@@ -1707,9 +1746,12 @@ export const AdminDashboard: React.FC = () => {
                     categoryId,
                     basePrice,
                     promotionalPrice: promo || undefined,
-                    description
+                    description,
+                    image: mainPhoto,
+                    images: allPhotos
                   });
                   setEditingProduct(null);
+                  setProductPhotos([]);
                 } else {
                   addProduct({
                     name,
@@ -1717,7 +1759,8 @@ export const AdminDashboard: React.FC = () => {
                     basePrice,
                     promotionalPrice: promo || undefined,
                     description,
-                    image: '/src/assets/images/product_bolo_morango_1794237512290.jpg',
+                    image: mainPhoto,
+                    images: allPhotos,
                     badge: 'novidade',
                     rating: 5.0,
                     reviewsCount: 1,
@@ -1733,9 +1776,10 @@ export const AdminDashboard: React.FC = () => {
                     availableToppings: [{ name: 'Topper Comemorativo', price: 15 }]
                   });
                   setIsNewProductModalOpen(false);
+                  setProductPhotos([]);
                 }
               }}
-              className="space-y-3 text-xs"
+              className="space-y-3.5 text-xs"
             >
               <div>
                 <label className="block font-bold text-[#4A382A] mb-1">Nome do Produto:</label>
@@ -1746,6 +1790,83 @@ export const AdminDashboard: React.FC = () => {
                   defaultValue={editingProduct?.name || ''}
                   className="w-full bg-[#FAF7F2] border border-[#E6DCD1] rounded-xl px-3 py-2 text-[#2D2118]"
                 />
+              </div>
+
+              {/* Upload de Múltiplas Fotos */}
+              <div className="space-y-2">
+                <label className="block font-bold text-[#4A382A]">
+                  Fotos do Produto (Você pode enviar mais de uma foto):
+                </label>
+
+                <input
+                  type="file"
+                  id="admin-product-file-input"
+                  accept="image/*"
+                  multiple
+                  onChange={handleProductPhotoUpload}
+                  className="hidden"
+                />
+
+                <label
+                  htmlFor="admin-product-file-input"
+                  className="border-2 border-dashed border-[#D5C4B5] hover:border-[#FF7243] bg-[#FAF7F2] hover:bg-[#FFF7F2] rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group"
+                >
+                  <Upload className="w-6 h-6 text-[#FF7243] group-hover:scale-110 transition-transform mb-1" />
+                  <span className="font-bold text-xs text-[#2D2118]">
+                    Clique para carregar fotos do doce
+                  </span>
+                  <span className="text-[10px] text-[#7A6455]">
+                    Selecione uma ou mais fotos do seu celular ou computador (JPG, PNG, WebP)
+                  </span>
+                </label>
+
+                {/* Previews das fotos carregadas */}
+                {productPhotos.length > 0 && (
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[11px] text-[#7A6455] font-semibold block">
+                      Fotos adicionadas ({productPhotos.length}) · A 1ª foto será a capa principal:
+                    </span>
+                    <div className="flex flex-wrap gap-2.5 max-h-36 overflow-y-auto p-1 bg-[#FAF7F2] rounded-xl border border-[#E6DCD1]">
+                      {productPhotos.map((photo, index) => (
+                        <div
+                          key={index}
+                          className="relative w-18 h-18 rounded-xl overflow-hidden border-2 border-white shadow-xs group shrink-0"
+                        >
+                          <img
+                            src={photo}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          {index === 0 && (
+                            <span className="absolute top-1 left-1 bg-[#FF7243] text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-full shadow-xs">
+                              Capa
+                            </span>
+                          )}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                            {index !== 0 && (
+                              <button
+                                type="button"
+                                onClick={() => handleSetPrimaryPhoto(index)}
+                                title="Definir como capa"
+                                className="p-1 bg-white/90 hover:bg-white text-[#2D2118] rounded-md text-[9px] font-bold"
+                              >
+                                Capa
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleRemovePhoto(index)}
+                              title="Remover foto"
+                              className="p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-md"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
