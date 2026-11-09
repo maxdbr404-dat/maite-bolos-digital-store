@@ -1,64 +1,78 @@
 import { Category, Product, DeliveryDriver, Coupon, StoreSettings, Order } from '../types';
 
-export const STORE_LOGO_URL = '/src/assets/images/maite_logo_patisserie_1794237555058.jpg';
-export const HERO_IMAGE_URL = '/src/assets/images/hero_welcome_bakery_1794237511122.jpg';
-export const DRIVER_AVATAR_URL = '/src/assets/images/avatar_entregador_1794237540071.jpg';
+import logoPatisserie from '../assets/images/maite_logo_patisserie_1794237555058.jpg';
+import heroBakery from '../assets/images/hero_welcome_bakery_1794237511122.jpg';
+import avatarEntregador from '../assets/images/avatar_entregador_1794237540071.jpg';
+import boloMorango from '../assets/images/product_bolo_morango_1794237512290.jpg';
+import boloBrigadeiro from '../assets/images/product_bolo_brigadeiro_1794237511922.jpg';
+import boloCenoura from '../assets/images/product_bolo_cenoura_1794237536926.jpg';
+import boloRedVelvet from '../assets/images/product_red_velvet_1794237537894.jpg';
+import tortaMerengue from '../assets/images/product_torta_merengue_1794237513024.jpg';
+import tortaBanoffee from '../assets/images/product_banoffee_1794237538172.jpg';
+import brigadeirosBox from '../assets/images/product_brigadeiros_box_1794237514941.jpg';
+import browniesBox from '../assets/images/product_brownies_1794237537889.jpg';
+import cupcakesBox from '../assets/images/product_cupcakes_1794237538123.jpg';
+import kitPresente from '../assets/images/product_kit_presente_1794237515315.jpg';
+
+export const STORE_LOGO_URL = logoPatisserie;
+export const HERO_IMAGE_URL = heroBakery;
+export const DRIVER_AVATAR_URL = avatarEntregador;
 
 export const INITIAL_CATEGORIES: Category[] = [
   {
     id: 'bolos-decorados',
     name: 'Bolos Decorados',
     slug: 'bolos-decorados',
-    image: '/src/assets/images/product_bolo_morango_1794237512290.jpg',
+    image: boloMorango,
     description: 'Bolos artísticos e personalizados para momentos inesquecíveis'
   },
   {
     id: 'bolos-aniversario',
     name: 'Bolos de Festa',
     slug: 'bolos-aniversario',
-    image: '/src/assets/images/product_red_velvet_1794237537894.jpg',
+    image: boloRedVelvet,
     description: 'Combinações clássicas com recheios generosos e acabamento fino'
   },
   {
     id: 'bolos-caseiros',
     name: 'Bolos Caseiros & Vulcão',
     slug: 'bolos-caseiros',
-    image: '/src/assets/images/product_bolo_cenoura_1794237536926.jpg',
+    image: boloCenoura,
     description: 'Receitas de família com muita calda artesanal e afeto'
   },
   {
     id: 'tortas-finas',
     name: 'Tortas Finas',
     slug: 'tortas-finas',
-    image: '/src/assets/images/product_torta_merengue_1794237513024.jpg',
+    image: tortaMerengue,
     description: 'Massa crocante de manteiga e recheios delicados'
   },
   {
     id: 'brigadeiros-doces',
     name: 'Brigadeiros Gourmet',
     slug: 'brigadeiros-doces',
-    image: '/src/assets/images/product_brigadeiros_box_1794237514941.jpg',
+    image: brigadeirosBox,
     description: 'Docinhos enrolados um a um com chocolate nobre belga'
   },
   {
     id: 'brownies-barras',
     name: 'Brownies & Barras',
     slug: 'brownies-barras',
-    image: '/src/assets/images/product_brownies_1794237537889.jpg',
+    image: browniesBox,
     description: 'Casquinha craquelada crocante e interior cremoso fudgy'
   },
   {
     id: 'cupcakes',
     name: 'Cupcakes Delicados',
     slug: 'cupcakes',
-    image: '/src/assets/images/product_cupcakes_1794237538123.jpg',
+    image: cupcakesBox,
     description: 'Minibolos individuais recheados com topo em rosetas'
   },
   {
     id: 'kits-festa',
     name: 'Kits & Presentes',
     slug: 'kits-festa',
-    image: '/src/assets/images/product_kit_presente_1794237515315.jpg',
+    image: kitPresente,
     description: 'Kits completos prontos com bolo, doces e embalagem especial'
   }
 ];
@@ -71,7 +85,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Bolo com massa amanteigada de baunilha, recheio trufado de chocolate branco com compota artesanal de frutas vermelhas e cobertura aveludada com macarons franceses.',
     basePrice: 165.0,
     promotionalPrice: 148.0,
-    image: '/src/assets/images/product_bolo_morango_1794237512290.jpg',
+    image: boloMorango,
+    images: [boloMorango, heroBakery],
     badge: 'mais_vendido',
     rating: 4.9,
     reviewsCount: 48,
@@ -99,7 +114,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'bolos-aniversario',
     description: 'Pão de ló 100% cacau Callebaut, camadas generosas de brigadeiro cremoso de colher e cobertura com drip ganache e dezenas de brigadeiros enrolados.',
     basePrice: 175.0,
-    image: '/src/assets/images/product_bolo_brigadeiro_1794237511922.jpg',
+    image: boloBrigadeiro,
+    images: [boloBrigadeiro, browniesBox],
     badge: 'destaque',
     rating: 5.0,
     reviewsCount: 62,
@@ -128,7 +144,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'A clássica massa fofinha e dourada de cenoura fresca, com piscina transbordando de calda de brigadeiro artesanal que escorre ao cortar.',
     basePrice: 68.0,
     promotionalPrice: 59.0,
-    image: '/src/assets/images/product_bolo_cenoura_1794237536926.jpg',
+    image: boloCenoura,
+    images: [boloCenoura],
     badge: 'mais_vendido',
     rating: 4.9,
     reviewsCount: 84,
@@ -154,7 +171,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'tortas-finas',
     description: 'Pâte sablée fininha e crocante, curd sedoso de limão siciliano colhido fresco e nuvem de merengue suíço maçaricado ao ponto de caramelo.',
     basePrice: 110.0,
-    image: '/src/assets/images/product_torta_merengue_1794237513024.jpg',
+    image: tortaMerengue,
+    images: [tortaMerengue],
     badge: 'artesanal',
     rating: 4.8,
     reviewsCount: 39,
@@ -181,7 +199,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Caixa rígida premium com seleção de 12 doces enrolados à mão: Chocolate Belga, Pistache Siciliano, Ninho com Nutella e Churros com Doce de Leite.',
     basePrice: 62.0,
     promotionalPrice: 54.0,
-    image: '/src/assets/images/product_brigadeiros_box_1794237514941.jpg',
+    image: brigadeirosBox,
+    images: [brigadeirosBox],
     badge: 'mais_vendido',
     rating: 5.0,
     reviewsCount: 97,
@@ -208,7 +227,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'kits-festa',
     description: 'O presente perfeito pronto para encantar: mini bolo decorado com frase personalizada à mão na tampa, acompanhado de 4 cupcakes roseta e velinha.',
     basePrice: 125.0,
-    image: '/src/assets/images/product_kit_presente_1794237515315.jpg',
+    image: kitPresente,
+    images: [kitPresente, cupcakesBox],
     badge: 'novidade',
     rating: 4.9,
     reviewsCount: 52,
@@ -235,7 +255,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'bolos-aniversario',
     description: 'Camadas aveludadas de massa vermelha com toque sutil de cacau, recheadas com autêntico frosting de cream cheese aerado e decoradas com pétalas comestíveis.',
     basePrice: 155.0,
-    image: '/src/assets/images/product_red_velvet_1794237537894.jpg',
+    image: boloRedVelvet,
+    images: [boloRedVelvet],
     badge: 'destaque',
     rating: 4.9,
     reviewsCount: 31,
@@ -261,7 +282,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Quadrados artesanais de puro chocolate meio amargo nobre, textura densa e úmida, finalizados com nozes crocantes e flor de sal.',
     basePrice: 48.0,
     promotionalPrice: 42.0,
-    image: '/src/assets/images/product_brownies_1794237537889.jpg',
+    image: browniesBox,
+    images: [browniesBox],
     badge: 'mais_vendido',
     rating: 4.8,
     reviewsCount: 45,
@@ -286,7 +308,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'cupcakes',
     description: 'Massas fofas de baunilha de Madagascar recheadas com ganache e finalizadas com rosetas artesanais de buttercream suave.',
     basePrice: 46.0,
-    image: '/src/assets/images/product_cupcakes_1794237538123.jpg',
+    image: cupcakesBox,
+    images: [cupcakesBox],
     badge: 'artesanal',
     rating: 4.7,
     reviewsCount: 22,
@@ -311,7 +334,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'tortas-finas',
     description: 'Base amanteigada crocante de biscoito, camadas fartas de doce de leite argentino, rodelas frescas de banana nanica e chantilly fresco com canela.',
     basePrice: 105.0,
-    image: '/src/assets/images/product_banoffee_1794237538172.jpg',
+    image: tortaBanoffee,
+    images: [tortaBanoffee],
     badge: 'mais_vendido',
     rating: 5.0,
     reviewsCount: 73,
@@ -336,7 +360,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'bolos-caseiros',
     description: 'Receita tradicional caipira com milho e fubá fininho, queijo meia cura e pedaços derretidos de goiabada cascão do interior.',
     basePrice: 52.0,
-    image: '/src/assets/images/product_bolo_cenoura_1794237536926.jpg',
+    image: boloCenoura,
+    images: [boloCenoura],
     badge: 'artesanal',
     rating: 4.8,
     reviewsCount: 29,
@@ -360,7 +385,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categoryId: 'tortas-finas',
     description: 'Três camadas perfeitas de mousses aveludadas: chocolate meio amargo 70%, chocolate ao leite e chocolate branco sobre massa sablée de cacau.',
     basePrice: 120.0,
-    image: '/src/assets/images/hero_welcome_bakery_1794237511122.jpg',
+    image: heroBakery,
+    images: [heroBakery],
     badge: 'destaque',
     rating: 4.9,
     reviewsCount: 34,
@@ -386,7 +412,7 @@ export const INITIAL_DRIVERS: DeliveryDriver[] = [
     id: 'driver-1',
     name: 'Carlos Alberto Silva',
     phone: '(19) 99124-8832',
-    photo: '/src/assets/images/avatar_entregador_1794237540071.jpg',
+    photo: avatarEntregador,
     rating: 4.95,
     status: 'em_rota',
     vehicle: 'Honda CG 160 Fan - Placa EFA-4921 (Bolsa Térmica de Bolos)',
@@ -397,7 +423,7 @@ export const INITIAL_DRIVERS: DeliveryDriver[] = [
     id: 'driver-2',
     name: 'Lucas Henrique Dias',
     phone: '(19) 98845-2190',
-    photo: '/src/assets/images/avatar_entregador_1794237540071.jpg',
+    photo: avatarEntregador,
     rating: 4.88,
     status: 'disponivel',
     vehicle: 'Yamaha Fazer 250 - Placa DKO-3819 (Suporte Rígido Nivelado)',
@@ -408,7 +434,7 @@ export const INITIAL_DRIVERS: DeliveryDriver[] = [
     id: 'driver-3',
     name: 'Rafael Mendes Rocha',
     phone: '(19) 99763-4411',
-    photo: '/src/assets/images/avatar_entregador_1794237540071.jpg',
+    photo: avatarEntregador,
     rating: 4.92,
     status: 'disponivel',
     vehicle: 'Fiat Fiorino Climatizada - Placa MBT-1024',

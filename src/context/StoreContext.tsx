@@ -94,48 +94,104 @@ const STORAGE_KEYS = {
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+      if (saved) {
+        const parsed: Product[] = JSON.parse(saved);
+        // Fix any old hardcoded unbundled /src/assets paths with current bundled images
+        return parsed.map(prod => {
+          const defaultMatch = INITIAL_PRODUCTS.find(p => p.id === prod.id);
+          const image = prod.image && !prod.image.startsWith('/src/assets') ? prod.image : (defaultMatch?.image || INITIAL_PRODUCTS[0].image);
+          const images = prod.images && prod.images.length > 0
+            ? prod.images.map(img => img.startsWith('/src/assets') ? image : img)
+            : [image];
+          return { ...prod, image, images };
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to parse saved products, resetting to defaults', e);
+    }
+    return INITIAL_PRODUCTS;
   });
 
   const [categories, setCategories] = useState<Category[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
-    return saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+      if (saved) {
+        const parsed: Category[] = JSON.parse(saved);
+        return parsed.map(cat => {
+          const defaultMatch = INITIAL_CATEGORIES.find(c => c.id === cat.id);
+          const image = cat.image && !cat.image.startsWith('/src/assets') ? cat.image : (defaultMatch?.image || INITIAL_CATEGORIES[0].image);
+          return { ...cat, image };
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to parse saved categories, resetting to defaults', e);
+    }
+    return INITIAL_CATEGORIES;
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.ORDERS);
-    return saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.ORDERS);
+      return saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    } catch {
+      return INITIAL_ORDERS;
+    }
   });
 
   const [drivers, setDrivers] = useState<DeliveryDriver[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.DRIVERS);
-    return saved ? JSON.parse(saved) : INITIAL_DRIVERS;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.DRIVERS);
+      return saved ? JSON.parse(saved) : INITIAL_DRIVERS;
+    } catch {
+      return INITIAL_DRIVERS;
+    }
   });
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.COUPONS);
-    return saved ? JSON.parse(saved) : INITIAL_COUPONS;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.COUPONS);
+      return saved ? JSON.parse(saved) : INITIAL_COUPONS;
+    } catch {
+      return INITIAL_COUPONS;
+    }
   });
 
   const [settings, setSettings] = useState<StoreSettings>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    } catch {
+      return INITIAL_SETTINGS;
+    }
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CART);
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.CART);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.WELCOME);
-    return saved ? JSON.parse(saved) : false;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.WELCOME);
+      return saved ? JSON.parse(saved) : false;
+    } catch {
+      return false;
+    }
   });
 
   const [mobileFrameMode, setMobileFrameMode] = useState<boolean>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.FRAME_MODE);
-    return saved ? JSON.parse(saved) : false;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.FRAME_MODE);
+      return saved ? JSON.parse(saved) : false;
+    } catch {
+      return false;
+    }
   });
 
   const [isTutorialOpen, setIsTutorialOpen] = useState<boolean>(false);
